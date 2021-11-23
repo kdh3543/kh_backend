@@ -15,7 +15,7 @@ public class Delete extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int del = Integer.parseInt(request.getParameter("id"));
-		StudyDao dao = new StudyDao();
+		StudyDao dao = StudyDao.getInstance();
 		
 		try {
 			dao.delete(del);

@@ -17,7 +17,7 @@ public class Update extends HttpServlet {
 		int id = Integer.parseInt(request.getParameter("updateId"));
 		String name = request.getParameter("name");
 		String contact = request.getParameter("contact");
-		ContactDao dao = new ContactDao();
+		ContactDao dao = ContactDao.getInstance();
 		
 		try {
 			dao.update(id, name, contact);

@@ -16,13 +16,17 @@ public class Servlet01 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ContactDao dao = new ContactDao();
+		ContactDao dao = ContactDao.getInstance();
 		String name = request.getParameter("name");
 		String contact = request.getParameter("contact");
 
 		try {
-			dao.insert(name,contact);
-			response.sendRedirect("index.html");
+			int result = dao.insert(name,contact);
+			request.setAttribute("result", result);
+			
+			request.getRequestDispatcher("inputView.jsp").forward(request, response);
+			//response.sendRedirect("inputView.jsp");
+						
 		}catch(Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("error.html");

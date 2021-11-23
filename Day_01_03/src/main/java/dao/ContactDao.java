@@ -1,26 +1,49 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 import dto.ContactDto;
 
 
 public class ContactDao {
 	
-	private Connection getConnection() throws Exception{
-		String userName = "kh";
-		String password = "kh";
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		
-		Connection con = DriverManager.getConnection(url,userName,password);
-		return con;
+	
+	private static ContactDao instance = null;
+	public static ContactDao getInstance() {
+		if(instance==null) {
+			instance=new ContactDao();
+		}
+		return instance;
 	}
+	// Singleton 관련 코드
+	
+	private ContactDao() {}	
+	private Connection getConnection() throws Exception{
+		Context ctx = new InitialContext();
+		
+		DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/oracle");
+		//									찾기위한resource/찾으려는 이름
+		return ds.getConnection();
+	}
+	// JNDI 관련 코드
+	
+//	private Connection getConnection() throws Exception{
+//		String userName = "kh";
+//		String password = "kh";
+//		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+//		Class.forName("oracle.jdbc.driver.OracleDriver");
+//		
+//		Connection con = DriverManager.getConnection(url,userName,password);
+//		return con;
+//	}
 	
 	public int insert(String name, String contact) throws Exception{
 		String sql = "insert into contact values(contact_seq.nextval,?,?)";

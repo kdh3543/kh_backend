@@ -18,7 +18,7 @@ public class Update extends HttpServlet {
 		String name = request.getParameter("name");
 		int kor = Integer.parseInt(request.getParameter("kor")); 
 		int eng = Integer.parseInt(request.getParameter("eng"));
-		StudyDao dao = new StudyDao();
+		StudyDao dao = StudyDao.getInstance();
 		
 		try {
 			dao.update(id, name, kor, eng);

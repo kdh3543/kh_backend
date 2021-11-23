@@ -14,14 +14,15 @@ import dao.StudyDao;
 public class Study extends HttpServlet {
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		StudyDao dao = new StudyDao();
+		StudyDao dao = StudyDao.getInstance();
 		String name = request.getParameter("name");
 		int kor = Integer.parseInt(request.getParameter("kor"));
 		int eng = Integer.parseInt(request.getParameter("eng"));
 		
 		try {
-			dao.insert(name, kor, eng);
-			response.sendRedirect("index.html");
+			int result = dao.insert(name, kor, eng);
+			request.setAttribute("result", result);
+			request.getRequestDispatcher("inputView.jsp").forward(request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("error.html");

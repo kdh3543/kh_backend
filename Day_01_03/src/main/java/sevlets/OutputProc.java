@@ -1,7 +1,7 @@
 package sevlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,67 +18,30 @@ import dto.ContactDto;
 public class OutputProc extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter pw = response.getWriter();
-		ContactDao dao = new ContactDao();
+		
+//		String[] arr = new String[] {"Apple","Mango","Orange"};
+//		ContactDto dto = new ContactDto(100,"ABC","DEF");
+//		List<ContactDto> list = new ArrayList<>();
+//		list.add(new ContactDto(1,"ABC","DEF"));
+//		list.add(new ContactDto(2,"GHI","JKL"));
+//		list.add(new ContactDto(3,"MNO","PQR"));
+//		
+//		request.setAttribute("simple1", 14);
+//		request.setAttribute("simple2", "Hello");
+//		request.setAttribute("array", arr);
+//		request.setAttribute("contact", dto);
+//		request.setAttribute("list", list);
+		
+		ContactDao dao = ContactDao.getInstance();
 		try {
 			List<ContactDto> list = dao.selectAll();
-			pw.append("<html>");
-			pw.append("<head>");
-			pw.append("</head>");
-			pw.append("<body>");
-			pw.append("<table border=1 align=center>");
-			pw.append("<tr>");
-			pw.append("<th colspan=3>Contacts");
-			pw.append("</tr>");
-			pw.append("<tr>");
-			pw.append("<th>");
-			pw.append("<th>Name");
-			pw.append("<th>Contact");
-			pw.append("</tr>");
-			for(ContactDto dto : list) {
-				pw.append("<tr>");
-				pw.append("<td>"+dto.getSeq());
-				pw.append("<td>"+dto.getName());
-				pw.append("<td>"+dto.getContact());
-				pw.append("</tr>");
-			}
-			pw.append("<tr>");
-			pw.append("<th colspan=3>");
-			pw.append("<form action='DeleteProc' method=get>");
-			pw.append("<input type=text name=delID placeholder='Input target id to delet'>");
-			pw.append("<button>Delete</button>");
-			pw.append("</form>");
-			pw.append("</tr>");
-			
-			pw.append("<form action='Update' method=get>");
-			pw.append("<tr>");
-			pw.append("<th colspan=3>");
-			pw.append("<input type=text placeholder='Input name to update' name=name>");
-			pw.append("</tr>");
-			pw.append("<tr>");
-			pw.append("<th colspan=3>");
-			pw.append("<input type=text placeholder='Input contact to update' name=contact>");
-			pw.append("</tr>");
-			pw.append("<tr>");
-			pw.append("<th colspan=3>");
-			pw.append("<input type=text name=updateId placeholder='Input id to target'>");
-			pw.append("</tr>");
-			pw.append("<tr>");
-			pw.append("<th colspan=3>");
-			pw.append("<button>Update</button>");
-			pw.append("</tr>");
-			pw.append("</form>");
-			
-			pw.append("<tr>");
-			pw.append("<th colspan=3 align=center><a href='index.html'>Back</a>");
-			pw.append("</tr>");
-			pw.append("</table>");
-			pw.append("</body>");
-			pw.append("</html>");
+			request.setAttribute("list", list);
+			request.getRequestDispatcher("outputView.jsp").forward(request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("error.html");
 		}
+		
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
