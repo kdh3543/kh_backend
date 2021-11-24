@@ -1,34 +1,34 @@
-package sevlets;
+package member;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.ContactDao;
-
-@WebServlet("/Update")
-public class Update extends HttpServlet {
+@WebServlet("*.con")
+public class MembersController extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("updateId"));
-		String name = request.getParameter("name");
-		String contact = request.getParameter("contact");
-		ContactDao dao = ContactDao.getInstance();
+		String uri = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		String cmd = uri.substring(contextPath.length());
 		
 		try {
-			dao.update(id, name, contact);
-			response.sendRedirect("OutputProc");
+			if(cmd.equals("/signup.con")) {
+				response.sendRedirect("member/signup.jsp");
+			}else if(cmd.equals("/idCheck.con")) {
+				String id = request.getParameter("id");
+				System.out.println("서버로 전달된 ID: "+id);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("error.html");
+			response.sendRedirect("error.jsp");
+			
 		}
 	}
 
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		doGet(request, response);

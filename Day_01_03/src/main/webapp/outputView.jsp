@@ -26,14 +26,14 @@
 		</c:forEach>
 		<tr>
 			<td colspan=3>
-			<form action="DeleteProc">
+			<form action="Delete.con">
 				<input type=text name=delID placeholder="input id to delete">
 				<button>Delete</button>
 			</form>
 		</tr>
 		<tr>
 			<td colspan=3>
-			<form action="Update">
+			<form action="Update.con">
 				<input type=text name=name placeholder="input name to change">
 				<input type=text name=contact placeholder="input contact to change">
 				<input type=text name=updateId placeholder="input id to target">

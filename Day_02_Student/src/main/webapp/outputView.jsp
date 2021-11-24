@@ -33,7 +33,7 @@
 		<tr>
 			<td colspan=6 align=center><a href="index.html">Back</a>
 		</tr>
-		<form action="Delete">
+		<form action="delete.con">
 			<tr>
 				<td colspan=6 align=center>Delete
 			</tr>
@@ -42,7 +42,7 @@
 				<td colspan=2><button>Delete</button>
 			</tr>
 		</form>
-		<form action="Update">
+		<form action="update.con">
 			<tr>
 				<td colspan=6 align=center>Update
 			</tr>
