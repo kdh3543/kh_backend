@@ -1,94 +1,67 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Signup</title>
+<title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    
-<style type="text/css">
-	.title{text-align:right;}
-	#num1,#num2{width:150px;}
-	#result{font-size:12px;}
-</style>
-
-<script>
-	$(function(){
-		$("#check").on("click",function(){
-			
-			let id = $("#id").val();
-			if(id==""){
-				alert("아이디를 입력하세요.")
-				return;
-			}
-			
-			
-			window.open("/idCheck.con?id="+$("#id").val(),"","width=300px,height=300px,top=200px,left=200px");
-		})
-	})
-	
-</script>
 </head>
 <body>
-	<form action="/insert.con" id=form method=post>
+	<form action="/update.con" id=form method=post>
 		<table border="1" align=center>
 			<tr>
-				<th colspan=2 align=center>회원 가입 정보
+				<th colspan=2 align=center>회원 정보 수정
 			</tr>
 			<tr>
 				<td class=title>아이디 :
-				<td><input type=text id=id name=id><input type=button value=중복확인 id=check>
+				<td><input type="text" name=id id="id" value="${dto.id }" disabled><br>
+				가입일 : ${dto.signup_date }
 			</tr>
 			<tr>
 				<td class=title>비밀번호 :
-				<td><input type=password id=pwd name=pwd>
+				<td><input type=password id=pwd name=pwd >
 			</tr>
 			<tr>
 				<td class=title>비밀번호 확인 :
-				<td><input type=password id=repwd>
+				<td><input type=password id=repwd >
 				<span id=result></span>
 			</tr>
 			<tr>
 				<td class=title>이름 :
-				<td><input type=text id=name name=name>
+				<td><input type=text id=name name=name value="${dto.name }">
 			</tr>
 			<tr>
 				<td class=title>전화번호 :
 				<td>
-					<select id=select name=select>
-						<option>02
-						<option>055
-						<option>010
-						<option>080
-					</select>
-					 - <input type=text id=num1 name=num1> - <input type=text id=num2 name=num2>
+					<input type=text id=num name=num value="${dto.phone }">
 				</td>
 			</tr>
 			<tr>
 				<td class=title>이메일 :
-				<td><input type=text id=email name=email>
+				<td><input type=text id=email name=email value ="${dto.email }">
 			</tr>
 			<tr>
 				<td class=title>우편번호 :
-				<td><input type=text id=postcode name=postcode><input type=button value=찾기 id=search>
+				<td><input type=text id=postcode name=postcode value="${dto.zipcode }">
+				<input type=button value=찾기 id=search>
 			</tr>
 			<tr>
 				<td class=title>주소1 :
-				<td><input type=text id=adrs1 name=adrs1>
+				<td><input type=text id=adrs1 name=adrs1 value="${dto.address1}">
 			</tr>
 			<tr>
 				<td class=title>주소2 :
-				<td><input type=text id=adrs2 name=adrs2>
+				<td><input type=text id=adrs2 name=adrs2 value="${dto.address2}">
 			</tr>
 			
 			<tr>
 				<td colspan=2 align=center>
-					<button type=submit>회원가입</button> <button type="reset">다시 입력</button>
+					<button type=submit>수정하기</button> <button type="reset">다시 입력</button>
 			</tr>
 		</table>
 	</form>
@@ -98,11 +71,15 @@
 		let pwd = $("#pwd");
 		let repwd = $("#repwd");
 		let result = $("#result");
-		let id = $("#id");
 		let name = $("#name");
-		let num1 = $("#num1");
-		let num2 = $("#num2");
+		let num = $("#num");
 		let email = $("#email");
+		let id = $("#id");
+		
+		id.on("click",function){
+			alert("아이디는 수정할 수 없습니다.");
+			pwd.focus();
+		}
 		
 		repwd.on("keyup",function(){
 			if(pwd.val()!=repwd.val()){
@@ -125,15 +102,6 @@
 		})
 		
 		form.on("submit",function(){
-			let idRegex = /[a-z][a-z0-9]{5,10}/g;
-			let idResult = idRegex.test(id.val());
-			if(!idResult){
-				alert("아이디를 제대로 입력해주세요.")
-				id.val("");
-				id.focus();
-				return false;
-			}
-			
 			let nameRegex = /[가-힣a-z]{2,}/g;
 			let nameResult = nameRegex.test(name.val());
 			if(!nameResult){
@@ -143,14 +111,13 @@
 				return false;
 			}
 			
-			let numRegex = /^[0-9]{4}$/;
-			let num1Result = numRegex.test(num1.val());
-			let num2Result = numRegex.test(num2.val());
-			if(!num1Result||!num2Result){
+			let numRegex = /^[0-9]{10,11}$/;
+			let numResult = numRegex.test(num.val());
+		
+			if(!numResult){
 				alert("전화번호를 제대로 입력해주세요.")
-				num1.val("");
-				num2.val("");
-				num1.focus();
+				num.val("");
+				num.focus();
 				return false;
 			}
 			
@@ -174,6 +141,5 @@
             }).open();
         }
 	</script>
-	
 </body>
 </html>
